@@ -21,6 +21,7 @@
 	</head>
 
   <body class="min-vh-100">
+    
     <header>
     	<h1 id="top" class="row d-flex justify-content-center">MiTrip</h1>
     </header>
@@ -28,17 +29,15 @@
   <main id="main">
       <section id="search-content">
         <form id="search-form">
-            <h2>Search for a City:</h2>
                 <div>
-                     <input type="text" id="location" placeholder="(City, State, Country) or US Zip Code" />
-                    <div id="location-error">
-                        Location not found. Please try again.<br />
-                        (format: city, state, country - or US zip code)
-                    </div>
+                  <h3>Start Your Trip:</h3>
+                     <input type="text" class="form-input" placeholder="Starting Point" />
+                     <input type="text" class="form-input" placeholder="Stop 1" />
+                     <input type="text" class="form-input" placeholder="Stop 2" />
+                     <input type="text" class="form-input" placeholder="Stop 3" />
+                     <input type="text" class="form-input" placeholder="Destination" />
                 </div>
-            <div>
-                <button id="search-btn" type="submit">Search</button>
-            </div>
+                <button id="search-btn" type="submit">Calculate Your Route!</button>
         </form>
       </section>
     <div id="root"></div>
