@@ -16,8 +16,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiamFjb2ItamVmZnJpZXMiLCJhIjoiY2xjcDFpNzQwOTcyY
 const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/streets-v12',
-  center: [-85.72182,45.30844], // starting position
-  zoom: 12
+  center: [-85,45], // starting position
+  zoom: 4.5
 });
 // set the bounds of the map
 const bounds = [
