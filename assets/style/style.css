@@ -1,11 +1,8 @@
 :root {
-    --primaryDark: #081B33;
-    --primaryLight: #152642;
-    --accent: #506680;
-    --accentHover: #2F4562;
-    --greyLight: #a1a8bd;
-    --greyDark: #353C51;
     --light: #fff;
+    --gradient: linear-gradient(-190deg, rgb(2, 126, 175) 0%, rgba(0,212,255,1) 100%);
+    --gradientLight: linear-gradient(-190deg, rgb(94, 173, 205) 0%, rgb(152, 233, 249) 100%);
+    --gradientGrey: linear-gradient(190deg, rgba(209,209,209,1) 0%, rgb(247, 247, 247) 100%);
     --error-color: hsl(0, 68%, 42%);
     --error-background-color: hsl(0, 68%, 80%);
 
@@ -16,12 +13,12 @@
 }
 
 body {
-    color: var(--light);
-    background-color: var(--primaryLight);
+    color: var(--greyDark);
+    background-color: var(--light);
 }
 
 #search-content {
-    background-color: var(--accentHover);
+    background: var(--gradientGrey);
     text-align: center;
     padding: 1rem;
     gap: 10px;
@@ -33,14 +30,14 @@ body {
     display:flex;
     justify-content: center;
     align-items:center;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 
 header {
     padding: .5rem;
     color: var(--light);
-    background-color: var(--primaryDark);
+    background: var(--gradient);
     text-align: center;
     padding-top: 1rem;
     padding-bottom: 1rem;
@@ -48,16 +45,16 @@ header {
 
 button {
     color: var(--light);
-    background-color: var(--accent);
+    background: var(--gradient);
     border: 0;
     padding: 15px 20px;
-    border-radius: 8px;
+    border-radius: 50px;
     text-decoration: none;
     display: inline-block;
 }
 
 button:hover {
-    background-color: var(--greyLight);
+    background: var(--gradientLight);
 }
 
 #search {
@@ -73,7 +70,7 @@ div:has(#location) {
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
-    border-radius: 8px;
+    border-radius: 50px;
     border: 2px solid transparent;
 }
 
@@ -92,7 +89,7 @@ div:has(#location) {
     display: none;
   }
 
-.location-choice {
+/* .location-choice {
     display: flex;
     flex-direction: column;
     gap: .75rem;
@@ -110,7 +107,7 @@ div:has(#location) {
 
 .location-choice button:hover {
     background-color: var(--greyLight);
-  }
+  } */
 
 .weather-icon-current {
     height: 10rem;
