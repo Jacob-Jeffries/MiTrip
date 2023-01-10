@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/style.css" />
+    <title>Weather</title>
+  </head>
+  <body>
+    <header id="header">
+      <h1>Weather Dashboard</h1>
+    </header>
+    <main id="main">
+      <section id="search-content">
+        <form id="search-form">
+            <h2>Search for a City:</h2>
+                <div>
+                    <input type="text" id="location" placeholder="(City, State, Country) or US Zip Code" />
+                    <div id="location-error">
+                         Location not found. Please try again.<br />
+                        (format: city, state, country - or US zip code)
+                    </div>
+                </div>
+            <div>
+                <button id="search-btn" type="submit">Search</button>
+            </div>
+        </form>
+        <div id="location-history"><h3>History</h3></div>
+      </section>
+      <div id="root"></div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/plugin/utc.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/plugin/timezone.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
+    <script src="./assets/js/script.js"></script>
+  </body>
+</html>
