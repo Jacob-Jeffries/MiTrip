@@ -192,6 +192,30 @@ function isZipCode(str) {
   }
 
 });
+
+//Start of Maping code
+
+let startCity = document.querySelector("#start");
+let stop1 = document.querySelector("#stop1");
+let stop2 = document.querySelector("#stop2");
+let endCity = document.querySelector("#end");
+
+let origin = []
+let way1 = []
+let way2 = []
+let destination = []
+
+$(document).on("submit", "#search-form", function(event) {
+    event.preventDefault();
+    $("#location").removeClass("error");
+    $("#location-error").hide();
+    $("#root").html('');
+    getLocation();
+
+
+});
+
+
 mapboxgl.accessToken = 'pk.eyJ1IjoiamFjb2ItamVmZnJpZXMiLCJhIjoiY2xjcDJzeTJtMWh3YzNwcjBscWJ2amg5OCJ9.FCsyRgLMa5gW0lyMlWsClw';
 const map = new mapboxgl.Map({
   container: 'map',
