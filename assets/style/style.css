@@ -68,6 +68,22 @@ button:hover {
     background: var(--gradientLight);
 }
 
+#map {
+  position: relative;
+  margin: 20px;
+  width: 400px;
+  height: 400px;
+}
+
+#instructions {
+  position: relative;
+  margin: 20px;
+  padding: 20px;
+  overflow-y: scroll;
+  font-family: sans-serif;
+}
+
+
 /* .location-choice {
     display: flex;
     flex-direction: column;
