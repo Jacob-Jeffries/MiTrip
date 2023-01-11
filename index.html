@@ -9,7 +9,9 @@
     <!--VIEWPORT is a mandatory tag for bootstrap-->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta author="Jacob Jeffries"/>
-  	<link rel="icon" type="image/x-icon" href="./assets/img/favicon.ico">
+  	
+    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -27,6 +29,7 @@
 	</head>
 
   <body class="min-vh-100">
+    
     <header>
     	<h1 id="top" class="row d-flex justify-content-center">MiTrip</h1>
     </header>
@@ -34,17 +37,14 @@
   <main id="main">
       <section id="search-content">
         <form id="search-form">
-            <h2>Search for a City:</h2>
                 <div>
-                     <input type="text" id="location" placeholder="(City, State, Country) or US Zip Code" />
-                    <div id="location-error">
-                        Location not found. Please try again.<br />
-                        (format: city, state, country - or US zip code)
-                    </div>
+                  <h3>Start Your Trip:</h3>
+                     <input type="text" class="form-input" placeholder="Starting Point" />
+                     <input type="text" class="form-input" placeholder="Stop 1" />
+                     <input type="text" class="form-input" placeholder="Stop 2" />
+                     <input type="text" class="form-input" placeholder="Destination" />
+                     <button id="search-btn" type="submit">Calculate Your Route!</button>
                 </div>
-            <div>
-                <button id="search-btn" type="submit">Search</button>
-            </div>
         </form>
 
         <div id="mapContainer" class="row d-flex">
