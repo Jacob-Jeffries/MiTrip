@@ -47,16 +47,10 @@
             </div>
         </form>
 
-        <div id='map' style='width: 400px; height: 400px;'></div>
-        <script>
-        mapboxgl.accessToken = 'pk.eyJ1IjoiamFjb2ItamVmZnJpZXMiLCJhIjoiY2xjcDFpNzQwOTcyYjNxcG50YzRzcXJkaCJ9.jzr3wLabpJcm1KbVsDCe-w';
-        const map = new mapboxgl.Map({
-        container: 'map', // container ID
-        style: 'mapbox://styles/mapbox/streets-v12', // style URL
-        center: [-85,45], // starting position [lng, lat]
-        zoom: 4.8, // starting zoom
-        });
-        </script>
+        <div id="mapContainer" class="row d-flex">
+          <div id='map' class="col" style='width: 400px; height: 400px;'></div>
+          <div id="instructions" class="col"></div>
+        </div>
 
     </main>
     

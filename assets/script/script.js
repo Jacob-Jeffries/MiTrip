@@ -1,34 +1,20 @@
-let origin = ['46.546389','-87.406667']
-let destination = ['45.745833','-87.064167']
-apiKey = 'pk.eyJ1IjoiamFjb2ItamVmZnJpZXMiLCJhIjoiY2xjcDJzeTJtMWh3YzNwcjBscWJ2amg5OCJ9.FCsyRgLMa5gW0lyMlWsClw'
-
-url = 'https://api.mapbox.com/directions/v5/mapbox/driving/'+origin[1]+','+origin[0]+';'+destination[1]+','+destination[0]+'?geometries=geojson&access_token='+apiKey
-
-fetch(url)
-.then(function(response) {
-  return response.json();
-})
-.then(function(data) {
-  console.log(data);
-});
-
 mapboxgl.accessToken = 'pk.eyJ1IjoiamFjb2ItamVmZnJpZXMiLCJhIjoiY2xjcDFpNzQwOTcyYjNxcG50YzRzcXJkaCJ9.jzr3wLabpJcm1KbVsDCe-w';
 const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/streets-v12',
-  center: [-85,45], // starting position
-  zoom: 4.5
+  center: [-122.662323, 45.523751], // starting position
+  zoom: 12
 });
 // set the bounds of the map
 const bounds = [
-  [-91.29156, 41.22885],
-  [-80.83142, 48.42494]
+  [-123.069003, 45.395273],
+  [-122.303707, 45.612333]
 ];
 map.setMaxBounds(bounds);
 
 // an arbitrary start will always be the same
 // only the end or destination will change
-const start = [-87.406667,46.546389];
+const start = [-122.662323, 45.523751];
 
 // this is where the code for the next step will go
 // create a function to make a directions request
@@ -42,6 +28,7 @@ async function getRoute(end) {
   );
   const json = await query.json();
   const data = json.routes[0];
+  console.log(json.routes[0]);
   const route = data.geometry.coordinates;
   const geojson = {
     type: 'Feature',
@@ -76,6 +63,19 @@ async function getRoute(end) {
     });
   }
   // add turn instructions here at the end
+  console.log(data);
+
+const instructions = document.getElementById('instructions');
+const steps = data.legs[0].steps;
+console.log(steps);
+
+let tripInstructions = '';
+for (const step of steps) {
+  tripInstructions += `<li>${step.maneuver.instruction}</li>`;
+}
+instructions.innerHTML = `<p><strong>Trip duration: ${Math.floor(
+  data.duration / 60
+)} min 🚴 </strong></p><ol>${tripInstructions}</ol>`;
 }
 
 map.on('load', () => {
@@ -109,5 +109,52 @@ map.on('load', () => {
     }
   });
   // this is where the code from the next step will go
+  map.on('click', (event) => {
+    const coords = Object.keys(event.lngLat).map((key) => event.lngLat[key]);
+    const end = {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: coords
+          }
+        }
+      ]
+    };
+    if (map.getLayer('end')) {
+      map.getSource('end').setData(end);
+    } else {
+      map.addLayer({
+        id: 'end',
+        type: 'circle',
+        source: {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                  type: 'Point',
+                  coordinates: coords
+                }
+              }
+            ]
+          }
+        },
+        paint: {
+          'circle-radius': 10,
+          'circle-color': '#f30'
+        }
+      });
+    }
+    getRoute(coords);
+  });
+  // get the sidebar and add the instructions
 });
+
 

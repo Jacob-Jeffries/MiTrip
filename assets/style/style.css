@@ -168,6 +168,26 @@ div:has(#location) {
     padding: .5rem 1rem;
   }
 
+  /*Mapbox Styles*/
+  #map {
+    position: relative;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+  }
+  #instructions {
+    position: relative;
+    margin: 20px;
+    width: 25%;
+    top: 0;
+    bottom: 20%;
+    padding: 20px;
+    background-color: #fff;
+    overflow-y: scroll;
+    font-family: sans-serif;
+  }
+  /*End Mapbox Styles*/
+  
 
   @media screen and (max-width: 480px){
     
