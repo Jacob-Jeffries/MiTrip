@@ -11,6 +11,20 @@
     font-family: 'Poppins', sans-serif;
 }
 
+header {
+    padding: .5rem;
+    color: var(--light);
+    background: var(--gradient);
+    text-align: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-weight: 700;
+}
+
+#logo {
+    width: 250px;
+}
+
 body {
     color: var(--greyDark);
     background-color: var(--light);
@@ -41,17 +55,8 @@ body {
 
 #search-btn {
     width: 100%;
-}
-
-
-header {
-    padding: .5rem;
-    color: var(--light);
-    background: var(--gradient);
-    text-align: center;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    font-weight: 700;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 button {
@@ -66,6 +71,15 @@ button {
 
 button:hover {
     background: var(--gradientLight);
+}
+
+footer {
+    padding: .5rem;
+    color: var(--light);
+    background: var(--gradientLight);
+    text-align: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
 /* .location-choice {
