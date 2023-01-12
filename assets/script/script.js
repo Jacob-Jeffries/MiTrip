@@ -207,12 +207,15 @@ let destination = []
 
 $(document).on("submit", "#search-form", function(event) {
     event.preventDefault();
-    $("#location").removeClass("error");
-    $("#location-error").hide();
-    $("#root").html('');
-    getLocation();
+    origin.push(startCity.value);
+    way1.push(stop1.value);
+    way2.push(stop2.value);
+    destination.push(endCity.value);
 
-
+    console.log(origin);
+    console.log(way1);
+    console.log(way2);
+    console.log(destination);
 });
 
 
