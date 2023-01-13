@@ -1,6 +1,8 @@
 var apiKey = "c4bb58bd64426daa167673eddf9bb21a";
 var city = "";
 var state = "";
+let startCity = document.querySelector("#start");
+let endCity = document.querySelector("#end");
 
 function isZipCode(str) {
   const re = /^\d{5}$/;
@@ -117,7 +119,7 @@ function isZipCode(str) {
     $("#location").addClass("error");
     $("#location-error").show();
   }
-
+  console.log(lat, lon);
   function getWeatherData(lat, lon, addHistory=true) {
     let url = "https://api.openweathermap.org/data/3.0/onecall";
     let data = {
@@ -210,6 +212,22 @@ $(document).on("submit", "#search-form", function(event) {
     console.log(destination);
 });
 
+// mapboxgl.accessToken = 'pk.eyJ1IjoiamFjb2ItamVmZnJpZXMiLCJhIjoiY2xjcXg0OHUwMDl6aTNubjJqMzBoNnBwaCJ9.I-p_a2qjCDbgwfdS9kKBXA';
+// const map = new mapboxgl.Map({
+// container: 'map',
+// // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+// style: 'mapbox://styles/mapbox/streets-v12',
+//   center: [-86, 44], // starting position
+//   zoom: 4.5
+// });
+ 
+// map.addControl(
+// new MapboxDirections({
+// accessToken: mapboxgl.accessToken
+// }),
+// 'top-left'
+// );
+
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiamFjb2ItamVmZnJpZXMiLCJhIjoiY2xjcDJzeTJtMWh3YzNwcjBscWJ2amg5OCJ9.FCsyRgLMa5gW0lyMlWsClw';
 const map = new mapboxgl.Map({
@@ -218,6 +236,13 @@ const map = new mapboxgl.Map({
   center: [-86, 44], // starting position
   zoom: 4.5
 });
+
+// map.addControl(
+//   new MapboxDirections({
+//   accessToken: mapboxgl.accessToken
+//   }),
+//   'top-left'
+// );
 // set the bounds of the map
 // const bounds = [
 //   [-90.81610, 41.50836],
@@ -288,7 +313,7 @@ for (const step of steps) {
 }
 instructions.innerHTML = `<p><strong>Trip duration: ${Math.floor(
   data.duration / 60
-)} min 🚴 </strong></p><ol>${tripInstructions}</ol>`;
+)} min 🚗 </strong></p><ol>${tripInstructions}</ol>`;
 }
 
 map.on('load', () => {
