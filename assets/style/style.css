@@ -98,6 +98,10 @@ footer {
     padding-bottom: 1rem;
 }
 
+#map {
+   border: 3px solid rgb(2, 126, 175);
+}
+
 /* .location-choice {
     display: flex;
     flex-direction: column;
