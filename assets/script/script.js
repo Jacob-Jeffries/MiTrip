@@ -1,6 +1,6 @@
 var apiKey = "c4bb58bd64426daa167673eddf9bb21a";
-var city = "";
-var state = "";
+var start = "";
+var end = "";
 
 function isZipCode(str) {
   const re = /^\d{5}$/;
@@ -49,7 +49,8 @@ function isZipCode(str) {
           locationError();
           return;
         }
-        city = location.name;
+        start = location.name;
+        end = location.name;
         getWeatherData(location.lat, location.lon);
       },
       error: function (response) {
@@ -83,8 +84,8 @@ function isZipCode(str) {
         }
         if (locations.length == 1) {
           getWeatherData(locations[0].lat, locations[0].lon);
-          city = locations[0].name;
-          state = locations[0].state;
+          start = locations[0].name;
+          end = locations[0].name;
           return;
         }
         $("#search-btn").after('<div class="location-choice"><h3>Which One?</h3></div>');
@@ -100,15 +101,15 @@ function isZipCode(str) {
   }
 
   $(document).on("click", ".location-choice-btn", function() {
-    city= $(this).data('city');
-    state = $(this).data('state');
+    start= $(this).data('city');
+    end = $(this).data('city');
     getWeatherData($(this).data('lat'), $(this).data('lon'));
     $(".location-choice").remove();
   });
 
   $(document).on("click", ".location-history-btn", function() {
-    city= $(this).data('city');
-    state = $(this).data('state');
+    start= $(this).data('city');
+    end = $(this).data('city');
     getWeatherData($(this).data('lat'), $(this).data('lon'), false);
     $(".location-choice").remove();
   });
@@ -159,7 +160,7 @@ function isZipCode(str) {
     console.log("dt", weather.current.dt);
     console.log("offset", weather.timezone_offset);
     $("#root").append(`<div id="current-wrapper">
-      <h2 id="current-header">Current Weather for ${city}, ${state}, ${country}<br />${dayjs(dayjs.unix(parseInt(weather.current.dt)+parseInt(weather.timezone_offset))).format("dddd, MMMM D, YYYY h:mmA")}</h2>
+      <h2 id="current-header">Current Weather for ${start}, ${end}<br />${dayjs(dayjs.unix(parseInt(weather.current.dt)+parseInt(weather.timezone_offset))).format("dddd, MMMM D, YYYY h:mmA")}</h2>
       <div id="current-content">
       <div id="icon"><img class="weather-icon-current" src="./assets/img/weather-icons/${weather.current.weather[0].icon}.png" /></div>
       <div id="current-text">
@@ -208,7 +209,7 @@ map.setMaxBounds(bounds);
 
 // an arbitrary start will always be the same
 // only the end or destination will change
-const start = [-122.662323, 45.523751];
+const arbstart = [-122.662323, 45.523751];
 
 // this is where the code for the next step will go
 // create a function to make a directions request
@@ -217,7 +218,7 @@ async function getRoute(end) {
   // an arbitrary start will always be the same
   // only the end or destination will change
   const query = await fetch(
-    `https://api.mapbox.com/directions/v5/mapbox/cycling/${start[0]},${start[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
+    `https://api.mapbox.com/directions/v5/mapbox/cycling/${arbstart[0]},${arbstart[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
     { method: 'GET' }
   );
   const json = await query.json();
@@ -275,7 +276,7 @@ instructions.innerHTML = `<p><strong>Trip duration: ${Math.floor(
 map.on('load', () => {
   // make an initial directions request that
   // starts and ends at the same location
-  getRoute(start);
+  getRoute(arbstart);
 
   // Add starting point to the map
   map.addLayer({
@@ -291,7 +292,7 @@ map.on('load', () => {
             properties: {},
             geometry: {
               type: 'Point',
-              coordinates: start
+              coordinates: arbstart
             }
           }
         ]
