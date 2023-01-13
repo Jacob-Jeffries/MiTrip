@@ -11,14 +11,14 @@ function isZipCode(str) {
   // search listener
   $(document).on("submit", "#search-form", function(event) {
     event.preventDefault();
-    $("#location").removeClass("error");
-    $("#location-error").hide();
+    // $("#location").removeClass("error");
+    // $("#location-error").hide();
     $("#root").html('');
     getLocation();
   });
 
   function getLocation() {
-    let searchLocation = $("#location").val();
+    let searchLocation = $("#start").val();
     console.log("location: ", searchLocation);
     console.log("isZip", isZipCode(searchLocation));
 
