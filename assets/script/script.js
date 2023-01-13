@@ -211,12 +211,11 @@ const map = new mapboxgl.Map({
 // only the end or destination will change
 const start = [-84.546667, 42.733611];
 
+//--Eventually this is be taking the start Lat / Long from local storage
+
 // this is where the code for the next step will go
 // create a function to make a directions request
 async function getRoute(end) {
-  // make a directions request using cycling profile
-  // an arbitrary start will always be the same
-  // only the end or destination will change
   const query = await fetch(
     `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
     { method: 'GET' }
@@ -349,5 +348,4 @@ map.on('load', () => {
     }
     getRoute(coords);
   });
-  // get the sidebar and add the instructions
 });
