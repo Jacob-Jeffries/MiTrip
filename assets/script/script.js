@@ -9,7 +9,7 @@ function isZipCode(str) {
   return re.test(str);
 }
 
-(function () {
+$ (function () {
   // search listener
   $(document).on("submit", "#search-form", function(event) {
     event.preventDefault();
