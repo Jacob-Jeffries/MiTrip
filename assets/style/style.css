@@ -1,5 +1,7 @@
 :root {
     --light: #fff;
+    --blueDark: rgb(2, 126, 175);
+    --blueLight: rgba(0,212,255,1);
     --gradient: linear-gradient(-190deg, rgb(2, 126, 175) 0%, rgba(0,212,255,1) 100%);
     --gradientLight: linear-gradient(-190deg, rgb(94, 173, 205) 0%, rgb(152, 233, 249) 100%);
     --gradientGrey: linear-gradient(190deg, rgba(209,209,209,1) 0%, rgb(247, 247, 247) 100%);
@@ -99,27 +101,27 @@ footer {
 }
 
 #map {
-   border: 3px solid rgb(2, 126, 175);
+   border: 3px solid var(--blueDark);
 }
 
-/* .location-choice {
+.location-choice {
     display: flex;
     flex-direction: column;
     gap: .75rem;
     justify-content: space-around;
     position: absolute;
-    border: 2px solid var(--accent);
+    border: 2px solid var(--blueDark);
     top:1rem;
     right: 1rem;
-    background-color:var(--accentHover);
+    background: var(--light);
     padding:.75rem;
     width: 35rem;
-    box-shadow: 10px 5px 15px var(--primaryDark);
+    box-shadow: 10px 5px 15px rgb(121, 121, 121);
     border-radius: 10px;
   }
 
 .location-choice button:hover {
     background-color: var(--greyLight);
-  } */
+  }
 
   /* @media screen and (max-width: 480px){
