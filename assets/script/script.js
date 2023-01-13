@@ -196,25 +196,17 @@ function isZipCode(str) {
 //Start of Maping code
 
 let startCity = document.querySelector("#start");
-let stop1 = document.querySelector("#stop1");
-let stop2 = document.querySelector("#stop2");
 let endCity = document.querySelector("#end");
 
 let origin = []
-let way1 = []
-let way2 = []
 let destination = []
 
 $(document).on("submit", "#search-form", function(event) {
     event.preventDefault();
     origin.push(startCity.value);
-    way1.push(stop1.value);
-    way2.push(stop2.value);
     destination.push(endCity.value);
 
     console.log(origin);
-    console.log(way1);
-    console.log(way2);
     console.log(destination);
 });
 
