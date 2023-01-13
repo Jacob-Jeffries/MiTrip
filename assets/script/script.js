@@ -121,7 +121,7 @@ $(function () {
     $("#location").addClass("error");
     $("#location-error").show();
   }
-  console.log(lat, lon);
+
   function getWeatherData(lat, lon, addHistory=true) {
     let url = "https://api.openweathermap.org/data/3.0/onecall";
     let data = {
