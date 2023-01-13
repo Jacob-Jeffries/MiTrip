@@ -9,7 +9,7 @@ function isZipCode(str) {
   return re.test(str);
 }
 
-(function () {
+$(function () {
   // search listener
   $(document).on("submit", "#search-form", function(event) {
     event.preventDefault();
@@ -87,6 +87,8 @@ function isZipCode(str) {
           getWeatherData(locations[0].lat, locations[0].lon);
           city = locations[0].name;
           state = locations[0].state;
+          localStorage.setItem("startLat", locations[0].lat);
+          localStorage.setItem("startLon", locations[0].lon);
           return;
         }
         $("#search-btn").after('<div class="location-choice"><h3>Which One?</h3></div>');
@@ -197,38 +199,6 @@ function isZipCode(str) {
 
 //Start of Maping code
 
-let startCity = document.querySelector("#start");
-let endCity = document.querySelector("#end");
-
-let origin = []
-let destination = []
-
-$(document).on("submit", "#search-form", function(event) {
-    event.preventDefault();
-    origin.push(startCity.value);
-    destination.push(endCity.value);
-
-    console.log(origin);
-    console.log(destination);
-});
-
-// mapboxgl.accessToken = 'pk.eyJ1IjoiamFjb2ItamVmZnJpZXMiLCJhIjoiY2xjcXg0OHUwMDl6aTNubjJqMzBoNnBwaCJ9.I-p_a2qjCDbgwfdS9kKBXA';
-// const map = new mapboxgl.Map({
-// container: 'map',
-// // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-// style: 'mapbox://styles/mapbox/streets-v12',
-//   center: [-86, 44], // starting position
-//   zoom: 4.5
-// });
- 
-// map.addControl(
-// new MapboxDirections({
-// accessToken: mapboxgl.accessToken
-// }),
-// 'top-left'
-// );
-
-
 mapboxgl.accessToken = 'pk.eyJ1IjoiamFjb2ItamVmZnJpZXMiLCJhIjoiY2xjcDJzeTJtMWh3YzNwcjBscWJ2amg5OCJ9.FCsyRgLMa5gW0lyMlWsClw';
 const map = new mapboxgl.Map({
   container: 'map',
@@ -237,22 +207,9 @@ const map = new mapboxgl.Map({
   zoom: 4.5
 });
 
-// map.addControl(
-//   new MapboxDirections({
-//   accessToken: mapboxgl.accessToken
-//   }),
-//   'top-left'
-// );
-// set the bounds of the map
-// const bounds = [
-//   [-90.81610, 41.50836],
-//   [-81.42114, 47.93089]
-// ];
-// map.setMaxBounds(bounds);
-
 // an arbitrary start will always be the same
 // only the end or destination will change
-const start = [-122.662323, 45.523751];
+const start = [-84.546667, 42.733611];
 
 // this is where the code for the next step will go
 // create a function to make a directions request
@@ -261,12 +218,12 @@ async function getRoute(end) {
   // an arbitrary start will always be the same
   // only the end or destination will change
   const query = await fetch(
-    `https://api.mapbox.com/directions/v5/mapbox/cycling/${start[0]},${start[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
+    `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
     { method: 'GET' }
   );
   const json = await query.json();
   const data = json.routes[0];
-  console.log(json.routes[0]);
+  // console.log(json.routes[0]);
   const route = data.geometry.coordinates;
   const geojson = {
     type: 'Feature',
@@ -301,11 +258,11 @@ async function getRoute(end) {
     });
   }
   // add turn instructions here at the end
-  console.log(data);
+  // console.log(data);
 
 const instructions = document.getElementById('instructions');
 const steps = data.legs[0].steps;
-console.log(steps);
+// console.log(steps);
 
 let tripInstructions = '';
 for (const step of steps) {
