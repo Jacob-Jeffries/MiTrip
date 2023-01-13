@@ -197,9 +197,6 @@ function isZipCode(str) {
 
 //Start of Maping code
 
-let startCity = document.querySelector("#start");
-let endCity = document.querySelector("#end");
-
 let origin = []
 let destination = []
 
