@@ -158,7 +158,8 @@ $(function () {
         return;
       },
     });
-    getRoute(end);
+    // getRoute(end);
+    callMapbox();
   };
 
   function displayWeatherData(weather) {
@@ -201,6 +202,24 @@ $(function () {
 
 // Start of MAPBOX code-----JJ
 
+function callMapbox(){
+  let start = [null]
+  let end = [null]
+
+  // This takes the lat & long from the weather API for the starting city. I pull it from local storage - essentially I am using the weather API as my forward geocoding service
+  start = [parseFloat(localStorage.getItem("startLon")), parseFloat(localStorage.getItem("startLat"))]
+  console.log(start);
+
+  // Hard coded the end point for development, until the second city in the form is working & storing Lon / Lat to local storage
+  end = [-84.546667, 42.733611];
+  console.log(end);
+
+  getRoute(start, end);
+
+  start = [null]
+  end = [null]
+}
+
 // Line 205: Save my API Token as a variable used later in the API call
 mapboxgl.accessToken = 'pk.eyJ1IjoiamFjb2ItamVmZnJpZXMiLCJhIjoiY2xjcDJzeTJtMWh3YzNwcjBscWJ2amg5OCJ9.FCsyRgLMa5gW0lyMlWsClw';
 
@@ -212,18 +231,11 @@ const map = new mapboxgl.Map({
   zoom: 4.5
 });
 
-// Line 215:  Hard coded the end point for development, until the second city in the form is working & storing Lon / Lat to local storage
-const end = [-84.546667, 42.733611];
+
 
 // getRout(end) create a function to make a directions request
 // This is an async function that uses await to handle the fetch promise
-async function getRoute(end) {
-  
-  // This takes the lat & long from the weather API for the starting city
-  // I pull it from local storage - essentially I am using the weather API as my forward geocoding service
-  const start = [localStorage.getItem("startLon"), localStorage.getItem("startLat")]
-  console.log(start);
-
+async function getRoute(start, end) {
   // Mapbox API call  
   const query = await fetch(
     `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
@@ -235,7 +247,7 @@ async function getRoute(end) {
   // console.log(json.routes[0]);
   // Pulling out the route data from the returned JSON object
   const route = data.geometry.coordinates;
-  // console.log(route);
+  console.log(route);
 
   // Creating an object that contains the route data in a structured "geojson" accordiung to MAPBOX specifications - used to draw route on the map: line endpoints are defined
   const geojson = {
@@ -249,11 +261,32 @@ async function getRoute(end) {
 
   // if the route already exists on the map, we'll reset it using setData
   if (map.getSource('route')) {
+    // console.log("if");
     map.getSource('route').setData(geojson);
+    map.getSource('point').setData(
+      {
+        type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'Point',
+                coordinates: [
+                  parseFloat(localStorage.getItem("startLon")),
+                  parseFloat(localStorage.getItem("startLat"))]
+              }
+      });
+    map.getSource('end').setData(
+      {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'Point',
+          coordinates: end
+        }
+      });
   }
-
   // otherwise, we'll make a new request and draw the new features
   else {
+    // console.log("else");
     map.addLayer({
       id: 'point',
       type: 'circle',
@@ -267,15 +300,17 @@ async function getRoute(end) {
               properties: {},
               geometry: {
                 type: 'Point',
-                coordinates: start
+                coordinates: [
+                  parseFloat(localStorage.getItem("startLon")),
+                  parseFloat(localStorage.getItem("startLat"))]
               }
             }
           ]
         }
       },
       paint: {
-        'circle-radius': 10,
-        'circle-color': '#3887be'
+        'circle-radius': 5,
+        'circle-color': '#00FF00'
       }
     });
     map.addLayer({
@@ -291,7 +326,7 @@ async function getRoute(end) {
       },
       paint: {
         'line-color': '#3887be',
-        'line-width': 5,
+        'line-width': 2.5,
         'line-opacity': 0.75
       }
     });
@@ -315,11 +350,11 @@ async function getRoute(end) {
               }
             },
             paint: {
-              'circle-radius': 10,
+              'circle-radius': 5,
               'circle-color': '#f30'
             }
           });
-  }
+    }
   
   // Add turn instructions here at the end
   // Line 327: calls the original JSON from the MAPBOX directions API call, and pulls out the text of directions. 
@@ -330,7 +365,6 @@ async function getRoute(end) {
     tripInstructions += `<li>${step.maneuver.instruction}</li>`;
   }
   instructions.innerHTML = `<p><strong>Trip duration: ${Math.floor(
-    data.duration / 60
-  )} min 🚗 </strong></p><ol>${tripInstructions}</ol>`;
+    data.duration / 3600)} hr 🚗 </strong></p><ol>${tripInstructions}</ol>`;
 };
 // END of async that get directions from MAPBOX directions API
