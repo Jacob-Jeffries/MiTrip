@@ -339,7 +339,6 @@ async function getRoute(start, end) {
     tripInstructions += `<li>${step.maneuver.instruction}</li>`;
   }
   instructions.innerHTML = `<p><strong>Trip duration: ${Math.floor(
-    data.duration / 60
-  )} min 🚗 </strong></p><ol>${tripInstructions}</ol>`;
+    data.duration / 3600)} hr 🚗 </strong></p><ol>${tripInstructions}</ol>`;
 };
 // END of async that get directions from MAPBOX directions API
