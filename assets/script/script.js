@@ -261,11 +261,12 @@ async function getRoute(start, end) {
 
   // if the route already exists on the map, we'll reset it using setData
   if (map.getSource('route')) {
+    console.log("if");
     map.getSource('route').setData(geojson);
   }
   // otherwise, we'll make a new request and draw the new features
   else {
-    console.log(start);
+    console.log("else");
     map.addLayer({
       id: 'point',
       type: 'circle',
@@ -279,7 +280,9 @@ async function getRoute(start, end) {
               properties: {},
               geometry: {
                 type: 'Point',
-                coordinates: [parseFloat(localStorage.getItem("startLon")), parseFloat(localStorage.getItem("startLat"))]
+                coordinates: [
+                  parseFloat(localStorage.getItem("startLon")),
+                  parseFloat(localStorage.getItem("startLat"))]
               }
             }
           ]
