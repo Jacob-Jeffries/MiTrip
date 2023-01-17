@@ -250,7 +250,7 @@ async function getRoute(start, end) {
   console.log(route);
 
   // Creating an object that contains the route data in a structured "geojson" accordiung to MAPBOX specifications - used to draw route on the map: line endpoints are defined
-  let geojson = {
+  const geojson = {
     type: 'Feature',
     properties: {},
     geometry: {
@@ -263,6 +263,8 @@ async function getRoute(start, end) {
   if (map.getSource('route')) {
     console.log("if");
     map.getSource('route').setData(geojson);
+    map.removeLayer('point');
+    map.removeLayer('end');
   }
   // otherwise, we'll make a new request and draw the new features
   else {
