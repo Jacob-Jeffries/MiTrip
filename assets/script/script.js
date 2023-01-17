@@ -1,8 +1,11 @@
 var apiKey = "c4bb58bd64426daa167673eddf9bb21a";
 var city = "";
 var state = "";
+var country = "";
 let startCity = document.querySelector("#start");
 let endCity = document.querySelector("#end");
+var date = ('dddd, MMMM Do YYYY');
+var dateTime = ('YYYY-MM-DD HH:MM:SS');
 
 function isZipCode(str) {
   const re = /^\d{5}$/;
@@ -119,9 +122,8 @@ $(function () {
     $("#location").addClass("error");
     $("#location-error").show();
   }
-
+  var url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`;
   function getWeatherData(lat, lon, addHistory=true) {
-    let url = "https://api.openweathermap.org/data/3.0/onecall";
     let data = {
       lat: lat,
       lon: lon,
@@ -148,7 +150,7 @@ $(function () {
         }
 
         $("#root").html('');
-        displayWeatherData(weather);
+        console.log(weather);
         if(addHistory) {
           $("#location-history").append(`<button type="button" class="location-history-btn" data-lat="${lat}" data-lon="${lon}" data-city="${city}" data-state="${state}" data-country="${country}">${city}, ${state}</button>`);
         }
@@ -161,43 +163,35 @@ $(function () {
     // getRoute(end);
     callMapbox();
   };
+  var cardTodayBody = $('.cardBodyToday')
+  $(cardTodayBody).empty();
 
-  function displayWeatherData(weather) {
-    console.log("dt", weather.current.dt);
-    console.log("offset", weather.timezone_offset);
-    $("#root").append(`<div id="current-wrapper">
-      <h2 id="current-header">Current Weather for ${city}, ${state}, ${country}<br />${dayjs(dayjs.unix(parseInt(weather.current.dt)+parseInt(weather.timezone_offset))).format("dddd, MMMM D, YYYY h:mmA")}</h2>
-      <div id="current-content">
-      <div id="icon"><img class="weather-icon-current" src="./assets/img/weather-icons/${weather.current.weather[0].icon}.png" /></div>
-      <div id="current-text">
-        <div id="current-description"><strong>Description: </strong>${weather.current.weather[0].description}</div>
-        <div id="current-temp"><strong>Temperature:</strong> ${weather.current.temp}&deg;F</div>
-        <div id="current-temp"><strong>Feels Like:</strong> ${weather.current.feels_like}&deg;F</div>
-        <div id="current-temp"><strong>Humidity:</strong> ${weather.current.humidity}%</div>
-        <div id="current-temp"><strong>Wind Speed:</strong> ${weather.current.wind_speed}mph</div>
-        </div>
-      </div>
-    </div>`);
-
-    $("#root").append('<div id="daily-wrapper"></div>');
-
-    weather.daily.forEach((day,index) => {
-      if(index < 5) {
-        $("body #daily-wrapper").append(`<div class="daily-forecast">
-          <h4>${dayjs(dayjs.unix(parseInt(day.dt) + parseInt(weather.timezone_offset))).format("ddd, MMM D")}</h4>
-          <div><img class="weather-icon-daily" src="./assets/img/weather-icons/${day.weather[0].icon}.png" /></div>
-          <div id="daily-text">
-            <div><strong>Temp Day:</strong> ${day.temp.day}&deg;F</div>
-            <div><strong>Temp Night:</strong> ${day.temp.night}&deg;F</div>
-            <div><strong>Feels Like:</strong> ${weather.current.feels_like}&deg;F</div>
-            <div><strong>Humidity:</strong> ${weather.current.humidity}%</div>
-            <div><strong>Wind Speed:</strong> ${weather.current.wind_speed}mph</div>
-            </div>
-        </div>`);
-    }
-    });
-  }
-
+	$.ajax({
+		url2: url,
+		method: 'GET',
+	}).then(function (response) {
+		$('.cardTodayCityName').text(response.name);
+		$('.cardTodayDate').text(date);
+		//Icons
+		$('.icons').attr('src', `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`);
+		// Temperature
+		var pEl = $('<p>').text(`Temperature: ${response.main.temp} °F`);
+		cardTodayBody.append(pEl);
+		//Feels Like
+		var pElTemp = $('<p>').text(`Feels Like: ${response.main.feels_like} °F`);
+		cardTodayBody.append(pElTemp);
+		//Humidity
+		var pElHumid = $('<p>').text(`Humidity: ${response.main.humidity} %`);
+		cardTodayBody.append(pElHumid);
+		//Wind Speed
+		var pElWind = $('<p>').text(`Wind Speed: ${response.wind.speed} MPH`);
+		cardTodayBody.append(pElWind);
+		//Set the lat and long from the searched city
+		var cityLon = response.coord.lon;
+		// console.log(cityLon);
+		var cityLat = response.coord.lat;
+		// console.log(cityLat);
+  })
 });
 
 // Start of MAPBOX code-----JJ
