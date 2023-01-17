@@ -215,6 +215,9 @@ function callMapbox(){
   console.log(end);
 
   getRoute(start, end);
+
+  start = [null]
+  end = [null]
 }
 
 // Line 205: Save my API Token as a variable used later in the API call
@@ -260,7 +263,6 @@ async function getRoute(start, end) {
   if (map.getSource('route')) {
     map.getSource('route').setData(geojson);
   }
-
   // otherwise, we'll make a new request and draw the new features
   else {
     console.log(start);
@@ -329,7 +331,7 @@ async function getRoute(start, end) {
               'circle-color': '#f30'
             }
           });
-  }
+    }
   
   // Add turn instructions here at the end
   // Line 327: calls the original JSON from the MAPBOX directions API call, and pulls out the text of directions. 
