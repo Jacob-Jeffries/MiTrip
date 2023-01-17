@@ -247,7 +247,7 @@ async function getRoute(start, end) {
   // console.log(route);
 
   // Creating an object that contains the route data in a structured "geojson" accordiung to MAPBOX specifications - used to draw route on the map: line endpoints are defined
-  const geojson = {
+  let geojson = {
     type: 'Feature',
     properties: {},
     geometry: {
