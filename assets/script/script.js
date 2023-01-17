@@ -244,7 +244,7 @@ async function getRoute(start, end) {
   // console.log(json.routes[0]);
   // Pulling out the route data from the returned JSON object
   const route = data.geometry.coordinates;
-  // console.log(route);
+  console.log(route);
 
   // Creating an object that contains the route data in a structured "geojson" accordiung to MAPBOX specifications - used to draw route on the map: line endpoints are defined
   let geojson = {
@@ -263,6 +263,7 @@ async function getRoute(start, end) {
 
   // otherwise, we'll make a new request and draw the new features
   else {
+    console.log(start);
     map.addLayer({
       id: 'point',
       type: 'circle',
@@ -284,7 +285,7 @@ async function getRoute(start, end) {
       },
       paint: {
         'circle-radius': 5,
-        'circle-color': '#3887be'
+        'circle-color': '#00FF00'
       }
     });
     map.addLayer({
