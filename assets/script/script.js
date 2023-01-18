@@ -27,11 +27,10 @@ $(function () {
   // search listener
   $(document).on("submit", "#search-form", function(event) {
     event.preventDefault();
-    // $("#location").removeClass("error");
-    // $("#location-error").hide();
     $("#root").html('');
-    getLocation();
+
     getWeatherToday();
+    callMapbox();
   });
 
   function getLocation(pos) {
@@ -62,9 +61,6 @@ $(function () {
       dataType: "json",
       success: function (location) {
         console.log(location);
-        localStorage.setItem(pos+"Lat", locations[0].lat);
-        localStorage.setItem(pos+"Lon", locations[0].lon);
-
         //if no results, show error
         if (!location.name) {
           locationError();
@@ -96,9 +92,6 @@ $(function () {
       success: function (locations) {
         console.log(locations);
         console.log("length", locations.length);
-        localStorage.setItem(pos+"Lat", locations[0].lat);
-        localStorage.setItem(pos+"Lon", locations[0].lon);
-
         //if no results, show error
         if (locations.length == 0) {
           locationError();
@@ -112,7 +105,7 @@ $(function () {
         }
         $("#search-btn").after('<div class="location-choice"><h3>Which One?</h3></div>');
         locations.forEach((location, index) => {
-          $(".location-choice").append(`<button type="button" class="location-choice-btn" data-lat="${location.lat}" data-lon="${location.lon}" data-city="${location.name}" data-state="${location.state}" data-country="${location.country}">${location.name}, ${location.state}</button>`);
+          $(".location-choice").append(`<button type="button" class="location-choice-btn" data-lat="${location.lat}" data-lon="${location.lon}" data-city="${location.name}" data-state="${location.state}" data-country="${location.country}" data-pos="${pos}" >${location.name}, ${location.state}</button>`);
         });
       },
       error: function (response) {
@@ -127,21 +120,17 @@ $(function () {
     state = $(this).data('state');
     getWeatherData($(this).data('lat'), $(this).data('lon'));
     $(".location-choice").remove();
+    localStorage.setItem($(this).data('pos')+"Lat", $(this).data('lat'));
+    localStorage.setItem($(this).data('pos')+"Lon", $(this).data('lon'));
   });
-
-  // $(document).on("click", ".location-history-btn", function() {
-  //   city= $(this).data('city');
-  //   state = $(this).data('state');
-  //   getWeatherData($(this).data('lat'), $(this).data('lon'), false);
-  //   $(".location-choice").remove();
-  // });
 
   function locationError() {
     $("#location").addClass("error");
     $("#location-error").show();
   }
   var url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`;
-  function getWeatherData(lat, lon, addHistory=true, pos) {
+  function getWeatherData(lat, lon, addHistory=true) {
+    // console.log("Tony Weather");
     let data = {
       lat: lat,
       lon: lon,
@@ -174,17 +163,18 @@ $(function () {
         return;
       },
     });
-    // getRoute(end);
-    callMapbox();
   };
+
   var cardTodayBody = $('cardBodyToday');
   function getWeatherToday() {
   $(cardTodayBody).empty();
+  // console.log("Chris Weather");
 
 	$.ajax({
-		url2: url,
+		url: url,
 		method: 'GET',
 	}).then(function (response) {
+    console.log(response);
 		$('.cardTodayCityName').text(response.name);
 		$('.cardTodayDate').text(date);
 		//Icons
