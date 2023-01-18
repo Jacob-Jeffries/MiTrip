@@ -13,6 +13,17 @@ function isZipCode(str) {
 }
 
 $(function () {
+  
+  $(document).on("click", "#start-btn", function(event){
+    let pos = "start";
+    getLocation(pos);
+  });
+  
+  $(document).on("click", "#end-btn", function(event){
+    let pos = "end";
+    getLocation(pos)
+  });
+  
   // search listener
   $(document).on("submit", "#search-form", function(event) {
     event.preventDefault();
@@ -22,8 +33,10 @@ $(function () {
     getLocation();
   });
 
-  function getLocation() {
-    let searchLocation = $("#start").val();
+  function getLocation(pos) {
+    let id = "#"+pos;
+    console.log(id);
+    let searchLocation = $("#"+pos).val();
     console.log("location: ", searchLocation);
     console.log("isZip", isZipCode(searchLocation));
 
@@ -123,7 +136,7 @@ $(function () {
     $("#location-error").show();
   }
   var url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`;
-  function getWeatherData(lat, lon, addHistory=true) {
+  function getWeatherData(lat, lon, addHistory=true, pos) {
     let data = {
       lat: lat,
       lon: lon,
@@ -132,8 +145,8 @@ $(function () {
       appid: apiKey,
     };
 
-    localStorage.setItem("startLat", lat);
-    localStorage.setItem("startLon", lon);
+    localStorage.setItem(pos+"Lat", lat);
+    localStorage.setItem(pos+"Lon", lon);
 
     $.ajax({
       type: "get",
