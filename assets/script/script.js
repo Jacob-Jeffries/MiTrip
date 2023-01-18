@@ -303,7 +303,7 @@ async function getRoute(start, end) {
         }
       },
       paint: {
-        'circle-radius': 5,
+        'circle-radius': 10,
         'circle-color': '#00FF00'
       }
     });
@@ -320,7 +320,7 @@ async function getRoute(start, end) {
       },
       paint: {
         'line-color': '#3887be',
-        'line-width': 2.5,
+        'line-width': 5,
         'line-opacity': 0.75
       }
     });
@@ -344,7 +344,7 @@ async function getRoute(start, end) {
               }
             },
             paint: {
-              'circle-radius': 5,
+              'circle-radius':10,
               'circle-color': '#f30'
             }
           });
