@@ -13,29 +13,41 @@ function isZipCode(str) {
 }
 
 $(function () {
+  
+  $(document).on("click", "#start-btn", function(event){
+    let pos = "start";
+    getLocation(pos);
+  });
+  
+  $(document).on("click", "#end-btn", function(event){
+    let pos = "end";
+    getLocation(pos)
+  });
+  
   // search listener
   $(document).on("submit", "#search-form", function(event) {
     event.preventDefault();
-    // $("#location").removeClass("error");
-    // $("#location-error").hide();
     $("#root").html('');
-    getLocation();
+
     getWeatherToday();
+    callMapbox();
   });
 
-  function getLocation() {
-    let searchLocation = $("#start").val();
+  function getLocation(pos) {
+    let id = "#"+pos;
+    console.log(id);
+    let searchLocation = $("#"+pos).val();
     console.log("location: ", searchLocation);
     console.log("isZip", isZipCode(searchLocation));
 
     if (isZipCode(searchLocation)) {
-      getLocationByZip(searchLocation);
+      getLocationByZip(searchLocation, pos);
     } else {
-      getLocationByCity(searchLocation);
+      getLocationByCity(searchLocation, pos);
     }
   }
 
-  function getLocationByZip(searchLocation) {
+  function getLocationByZip(searchLocation, pos) {
     let url = "//api.openweathermap.org/geo/1.0/zip";
     let data = {
       zip: searchLocation + ",US",
@@ -49,7 +61,6 @@ $(function () {
       dataType: "json",
       success: function (location) {
         console.log(location);
-
         //if no results, show error
         if (!location.name) {
           locationError();
@@ -65,7 +76,7 @@ $(function () {
     });
   }
 
-  function getLocationByCity(searchLocation) {
+  function getLocationByCity(searchLocation, pos) {
     let url = "//api.openweathermap.org/geo/1.0/direct";
     let data = {
       q: searchLocation,
@@ -81,7 +92,6 @@ $(function () {
       success: function (locations) {
         console.log(locations);
         console.log("length", locations.length);
-
         //if no results, show error
         if (locations.length == 0) {
           locationError();
@@ -95,7 +105,7 @@ $(function () {
         }
         $("#search-btn").after('<div class="location-choice"><h3>Which One?</h3></div>');
         locations.forEach((location, index) => {
-          $(".location-choice").append(`<button type="button" class="location-choice-btn" data-lat="${location.lat}" data-lon="${location.lon}" data-city="${location.name}" data-state="${location.state}" data-country="${location.country}">${location.name}, ${location.state}</button>`);
+          $(".location-choice").append(`<button type="button" class="location-choice-btn" data-lat="${location.lat}" data-lon="${location.lon}" data-city="${location.name}" data-state="${location.state}" data-country="${location.country}" data-pos="${pos}" >${location.name}, ${location.state}</button>`);
         });
       },
       error: function (response) {
@@ -110,13 +120,8 @@ $(function () {
     state = $(this).data('state');
     getWeatherData($(this).data('lat'), $(this).data('lon'));
     $(".location-choice").remove();
-  });
-
-  $(document).on("click", ".location-history-btn", function() {
-    city= $(this).data('city');
-    state = $(this).data('state');
-    getWeatherData($(this).data('lat'), $(this).data('lon'), false);
-    $(".location-choice").remove();
+    localStorage.setItem($(this).data('pos')+"Lat", $(this).data('lat'));
+    localStorage.setItem($(this).data('pos')+"Lon", $(this).data('lon'));
   });
 
   function locationError() {
@@ -125,6 +130,7 @@ $(function () {
   }
   var url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`;
   function getWeatherData(lat, lon, addHistory=true) {
+    // console.log("Tony Weather");
     let data = {
       lat: lat,
       lon: lon,
@@ -132,9 +138,6 @@ $(function () {
       exclude: 'minutely,hourly',
       appid: apiKey,
     };
-
-    localStorage.setItem("startLat", lat);
-    localStorage.setItem("startLon", lon);
 
     $.ajax({
       type: "get",
@@ -160,17 +163,18 @@ $(function () {
         return;
       },
     });
-    // getRoute(end);
-    callMapbox();
   };
+
   var cardTodayBody = $('cardBodyToday');
   function getWeatherToday() {
   $(cardTodayBody).empty();
+  // console.log("Chris Weather");
 
 	$.ajax({
-		url2: url,
+		url: url,
 		method: 'GET',
 	}).then(function (response) {
+    console.log(response);
 		$('.cardTodayCityName').text(response.name);
 		$('.cardTodayDate').text(date);
 		//Icons
@@ -207,7 +211,8 @@ function callMapbox(){
   console.log(start);
 
   // Hard coded the end point for development, until the second city in the form is working & storing Lon / Lat to local storage
-  end = [-84.546667, 42.733611];
+  // end = [-84.546667, 42.733611];
+  end = [parseFloat(localStorage.getItem("endLon")), parseFloat(localStorage.getItem("endLat"))]
   console.log(end);
 
   getRoute(start, end);
@@ -282,7 +287,27 @@ async function getRoute(start, end) {
   }
   // otherwise, we'll make a new request and draw the new features
   else {
-    // console.log("else");
+
+    //Adds a blue line to represent the travel path
+    map.addLayer({
+      id: 'route',
+      type: 'line',
+      source: {
+        type: 'geojson',
+        data: geojson
+      },
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      paint: {
+        'line-color': '#3887be',
+        'line-width': 5,
+        'line-opacity': 0.75
+      }
+    });
+
+    //Adds a Green circle to the map to represent the start point
     map.addLayer({
       id: 'point',
       type: 'circle',
@@ -305,52 +330,37 @@ async function getRoute(start, end) {
         }
       },
       paint: {
-        'circle-radius': 5,
+        'circle-radius': 10,
         'circle-color': '#00FF00'
       }
     });
+
+    //Add a red circle to the map to represent the destination point
     map.addLayer({
-      id: 'route',
-      type: 'line',
+      id: 'end',
+      type: 'circle',
       source: {
         type: 'geojson',
-        data: geojson
-      },
-      layout: {
-        'line-join': 'round',
-        'line-cap': 'round'
+        data: {
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'Point',
+                coordinates: end
+              }
+            }
+          ]
+        }
       },
       paint: {
-        'line-color': '#3887be',
-        'line-width': 2.5,
-        'line-opacity': 0.75
+        'circle-radius':10,
+        'circle-color': '#f30'
       }
     });
-    map.addLayer({
-            id: 'end',
-            type: 'circle',
-            source: {
-              type: 'geojson',
-              data: {
-                type: 'FeatureCollection',
-                features: [
-                  {
-                    type: 'Feature',
-                    properties: {},
-                    geometry: {
-                      type: 'Point',
-                      coordinates: end
-                    }
-                  }
-                ]
-              }
-            },
-            paint: {
-              'circle-radius': 5,
-              'circle-color': '#f30'
-            }
-          });
-    }
+  }
   
   // Add turn instructions here at the end
   // Line 327: calls the original JSON from the MAPBOX directions API call, and pulls out the text of directions. 
