@@ -280,7 +280,27 @@ async function getRoute(start, end) {
   }
   // otherwise, we'll make a new request and draw the new features
   else {
-    // console.log("else");
+
+    //Adds a blue line to represent the travel path
+    map.addLayer({
+      id: 'route',
+      type: 'line',
+      source: {
+        type: 'geojson',
+        data: geojson
+      },
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      paint: {
+        'line-color': '#3887be',
+        'line-width': 5,
+        'line-opacity': 0.75
+      }
+    });
+
+    //Adds a Green circle to the map to represent the start point
     map.addLayer({
       id: 'point',
       type: 'circle',
@@ -307,48 +327,33 @@ async function getRoute(start, end) {
         'circle-color': '#00FF00'
       }
     });
+
+    //Add a red circle to the map to represent the destination point
     map.addLayer({
-      id: 'route',
-      type: 'line',
+      id: 'end',
+      type: 'circle',
       source: {
         type: 'geojson',
-        data: geojson
-      },
-      layout: {
-        'line-join': 'round',
-        'line-cap': 'round'
+        data: {
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'Point',
+                coordinates: end
+              }
+            }
+          ]
+        }
       },
       paint: {
-        'line-color': '#3887be',
-        'line-width': 5,
-        'line-opacity': 0.75
+        'circle-radius':10,
+        'circle-color': '#f30'
       }
     });
-    map.addLayer({
-            id: 'end',
-            type: 'circle',
-            source: {
-              type: 'geojson',
-              data: {
-                type: 'FeatureCollection',
-                features: [
-                  {
-                    type: 'Feature',
-                    properties: {},
-                    geometry: {
-                      type: 'Point',
-                      coordinates: end
-                    }
-                  }
-                ]
-              }
-            },
-            paint: {
-              'circle-radius':10,
-              'circle-color': '#f30'
-            }
-          });
-    }
+  }
   
   // Add turn instructions here at the end
   // Line 327: calls the original JSON from the MAPBOX directions API call, and pulls out the text of directions. 
