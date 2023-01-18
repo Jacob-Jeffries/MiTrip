@@ -123,5 +123,10 @@ footer {
 .location-choice button:hover {
     background-color: var(--greyLight);
   }
-
+.card {
+	margin: 10px;
+}
+.cardTodayDate {
+	font-size: 20px;
+}
   /* @media screen and (max-width: 480px){

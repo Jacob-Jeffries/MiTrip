@@ -31,6 +31,7 @@ $(function () {
     // $("#location-error").hide();
     $("#root").html('');
     getLocation();
+    getWeatherToday();
   });
 
   function getLocation(pos) {
@@ -156,7 +157,6 @@ $(function () {
       dataType: "json",
       success: function (weather) {
         console.log("Weather Data",weather);
-
         // if no results, show error
         if (weather.length == 0) {
           locationError();
@@ -177,7 +177,8 @@ $(function () {
     // getRoute(end);
     callMapbox();
   };
-  var cardTodayBody = $('.cardBodyToday')
+  var cardTodayBody = $('cardBodyToday');
+  function getWeatherToday() {
   $(cardTodayBody).empty();
 
 	$.ajax({
@@ -206,6 +207,7 @@ $(function () {
 		var cityLat = response.coord.lat;
 		// console.log(cityLat);
   })
+}
 });
 
 // Start of MAPBOX code-----JJ
