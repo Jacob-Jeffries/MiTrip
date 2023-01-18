@@ -41,13 +41,13 @@ $(function () {
     console.log("isZip", isZipCode(searchLocation));
 
     if (isZipCode(searchLocation)) {
-      getLocationByZip(searchLocation);
+      getLocationByZip(searchLocation, pos);
     } else {
-      getLocationByCity(searchLocation);
+      getLocationByCity(searchLocation, pos);
     }
   }
 
-  function getLocationByZip(searchLocation) {
+  function getLocationByZip(searchLocation, pos) {
     let url = "//api.openweathermap.org/geo/1.0/zip";
     let data = {
       zip: searchLocation + ",US",
@@ -61,6 +61,8 @@ $(function () {
       dataType: "json",
       success: function (location) {
         console.log(location);
+        localStorage.setItem(pos+"Lat", locations[0].lat);
+        localStorage.setItem(pos+"Lon", locations[0].lon);
 
         //if no results, show error
         if (!location.name) {
@@ -77,7 +79,7 @@ $(function () {
     });
   }
 
-  function getLocationByCity(searchLocation) {
+  function getLocationByCity(searchLocation, pos) {
     let url = "//api.openweathermap.org/geo/1.0/direct";
     let data = {
       q: searchLocation,
@@ -93,6 +95,8 @@ $(function () {
       success: function (locations) {
         console.log(locations);
         console.log("length", locations.length);
+        localStorage.setItem(pos+"Lat", locations[0].lat);
+        localStorage.setItem(pos+"Lon", locations[0].lon);
 
         //if no results, show error
         if (locations.length == 0) {
@@ -144,9 +148,6 @@ $(function () {
       exclude: 'minutely,hourly',
       appid: apiKey,
     };
-
-    localStorage.setItem(pos+"Lat", lat);
-    localStorage.setItem(pos+"Lon", lon);
 
     $.ajax({
       type: "get",
@@ -218,7 +219,8 @@ function callMapbox(){
   console.log(start);
 
   // Hard coded the end point for development, until the second city in the form is working & storing Lon / Lat to local storage
-  end = [-84.546667, 42.733611];
+  // end = [-84.546667, 42.733611];
+  end = [parseFloat(localStorage.getItem("endLon")), parseFloat(localStorage.getItem("endLat"))]
   console.log(end);
 
   getRoute(start, end);
