@@ -111,12 +111,12 @@ $(function () {
     $(".location-choice").remove();
   });
 
-  $(document).on("click", ".location-history-btn", function() {
-    city= $(this).data('city');
-    state = $(this).data('state');
-    getWeatherData($(this).data('lat'), $(this).data('lon'), false);
-    $(".location-choice").remove();
-  });
+  // $(document).on("click", ".location-history-btn", function() {
+  //   city= $(this).data('city');
+  //   state = $(this).data('state');
+  //   getWeatherData($(this).data('lat'), $(this).data('lon'), false);
+  //   $(".location-choice").remove();
+  // });
 
   function locationError() {
     $("#location").addClass("error");
