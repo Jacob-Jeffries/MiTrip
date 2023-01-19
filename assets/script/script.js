@@ -178,7 +178,7 @@ $(function () {
 		var pElHumid = `<p>Humidity: ${weatherToday.current.humidity} %</p>`;
 		$('.'+pos+'cardBodyToday').append(pElHumid);
 		//Wind Speed
-		var pElWind = `<p>Wind Speed: ${weatherToday.current.speed} MPH</p>`;
+		var pElWind = `<p>Wind Speed: ${weatherToday.current.wind_speed} MPH</p>`;
 		$('.'+pos+'cardBodyToday').append(pElWind);
   };
 });
