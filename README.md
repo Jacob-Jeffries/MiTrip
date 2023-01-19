@@ -22,6 +22,8 @@ There are no installation requirments for this web applciation.
 
 3. Once both cities have been confirmed, click on the [CALCULATE YOUR ROUTE!] button to see the map updated with your route. An estimation of the duration of your trip along with turn-by-turn directions will be displayed. Finally, the current weather conditions for both cities will be displayed.
 
+![Display of map and directions](./images/Directions.png)
+
 ## Credits
 
 Jacob Jeffries
