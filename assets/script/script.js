@@ -8,16 +8,17 @@ var date = ('dddd, MMMM Do YYYY');
 var dateTime = ('YYYY-MM-DD HH:MM:SS');
 var latitude  = "";
 var longitude = "";
+let pos = "";
 
 $(function () {
   
   $(document).on("click", "#start-btn", function(event){
-    let pos = "start";
+    pos = "start";
     getLocation(pos);
   });
   
   $(document).on("click", "#end-btn", function(event){
-    let pos = "end";
+    pos = "end";
     getLocation(pos)
   });
   
