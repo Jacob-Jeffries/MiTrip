@@ -55,14 +55,23 @@
                       <input type="text" id="start" name="start" class="form-input" placeholder="City Name (ex. Detroit, Lansing, Ann Arbor, etc.)" />
                      <button id="start-btn" class="button text-white location-choice-btn" type="button">Confirm City</button>
                     </div>
+                    <div id="start-location-error">
+                     Location not found. Please try again.<br>
+                     Format: city, state, country<br>
+                     Please check for spelling errors<br>
+                    </div>
 
                     <!--This div contains the elements of the destination city search-->
                     <label for="end">Destination</label>
                     <div id="end-city-search" class="search-row">
                      <input type="text" id="end" name="end"  class="form-input" placeholder="City Name (ex. Marquette, Rochester, Jackson, etc.)" />
                      <button id="end-btn" class="button text-white location-choice-btn" type="button">Confirm City</button>
-
                     </div>
+                    <div id="end-location-error">
+                      Location not found. Please try again.<br>
+                      Format: city, state, country<br>
+                      Please check for spelling errors<br>
+                     </div>
 
                      <button id="search-btn" type="submit">Calculate Your Route!</button>
                 </div>
@@ -70,15 +79,15 @@
       </section>
 
       <!--This section contains the MAPBOX div-container; including the map tile div and the directions div-->
-      <section id="MapBox_Container">
-        <div id="map"></div>
-        <div id="instructions"></div>
+      <section id="MapBox_Container" class="row d-flex flex-wrap justify-content-around">
+        <div id="map" class="col-md-5 col-sm-12"></div>
+        <div id="instructions" class="col-md-5 col-sm-12"></div>
       </section>
       <!--END Mapbox section-->
 
       <!--START of Weather display Section-->
-      <section id="weatherContainer" class="row">
-        <div id="startWeather" class="card bg-light">
+      <section id="weatherContainer" class="row d-flex justify-content-around flex-wrap">
+        <div id="startWeather" class="card bg-light col-md-5 col-sm-12">
           <h2 class="startcardTodayCityName"></h2>
           <h3 class="startcardTodayDate"></h3>
           <img class="starticons"/>
@@ -86,7 +95,7 @@
           </div>
         </div>
 
-        <div id="endWeather" class="card bg-light">
+        <div id="endWeather" class="card bg-light col-md-5 col-sm-12">
           <h2 class="endcardTodayCityName"></h2>
          <h3 class="endcardTodayDate"></h3>
          <img class="endicons"/>

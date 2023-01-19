@@ -59,7 +59,7 @@ $(function () {
         console.log("length", locations.length);
         //if no results, show error
         if (locations.length == 0) {
-          locationError();
+          locationError(pos);
           return;
         }
 
@@ -67,6 +67,7 @@ $(function () {
         locations.forEach((location, index) => {
           $(".location-choice").append(`<button type="button" class="location-choice-btn" data-lat="${location.lat}" data-lon="${location.lon}" data-city="${location.name}" data-state="${location.state}" data-country="${location.country}" data-pos="${pos}" >${location.name}, ${location.state}</button>`);
         });
+        $("#"+pos+"-location-error").hide();
       },
       error: function (response) {
         locationError();
@@ -96,9 +97,9 @@ $(function () {
     getWeatherData(latitude, longitude, $(this).data('pos'));
   });
 
-  function locationError() {
-    $("#location").addClass("error");
-    $("#location-error").show();
+  function locationError(pos) {
+    // $("#location").addClass("error");
+    $("#"+pos+"-location-error").show();
   }
   function getWeatherData(lat, lon, pos, addHistory=true) {
 
