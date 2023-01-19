@@ -30,7 +30,7 @@ Jacob Jeffries
 Tony Trocino
 Chris Nagridge
 
-We utilized the OpwnWeather API, MapBox API, Jquery, and Bootstrap.  
+We utilized the OpenWeather API, MapBox API, Jquery, and Bootstrap.  
 
 ## License
 
