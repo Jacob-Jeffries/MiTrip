@@ -1,4 +1,4 @@
-var apiKey = "c4bb58bd64426daa167673eddf9bb21a";
+var apiKey = "dd973ce46d39d0efc4bc792777fb49f2";
 var city = "";
 var state = "";
 var country = "";
@@ -6,11 +6,8 @@ let startCity = document.querySelector("#start");
 let endCity = document.querySelector("#end");
 var date = ('dddd, MMMM Do YYYY');
 var dateTime = ('YYYY-MM-DD HH:MM:SS');
-
-function isZipCode(str) {
-  const re = /^\d{5}$/;
-  return re.test(str);
-}
+var latitude  = "";
+var longitude = "";
 
 $(function () {
   
@@ -28,8 +25,8 @@ $(function () {
   $(document).on("submit", "#search-form", function(event) {
     event.preventDefault();
     $("#root").html('');
-
-    getWeatherToday();
+    console.log("lat/lon", latitude);
+    getWeatherData(latitude, longitude);
     callMapbox();
   });
 
@@ -38,42 +35,7 @@ $(function () {
     console.log(id);
     let searchLocation = $("#"+pos).val();
     console.log("location: ", searchLocation);
-    console.log("isZip", isZipCode(searchLocation));
-
-    if (isZipCode(searchLocation)) {
-      getLocationByZip(searchLocation, pos);
-    } else {
-      getLocationByCity(searchLocation, pos);
-    }
-  }
-
-  function getLocationByZip(searchLocation, pos) {
-    let url = "//api.openweathermap.org/geo/1.0/zip";
-    let data = {
-      zip: searchLocation + ",US",
-      appid: apiKey,
-    };
-
-    $.ajax({
-      type: "get",
-      url: url,
-      data: data,
-      dataType: "json",
-      success: function (location) {
-        console.log(location);
-        //if no results, show error
-        if (!location.name) {
-          locationError();
-          return;
-        }
-        city = location.name;
-        getWeatherData(location.lat, location.lon);
-      },
-      error: function (response) {
-        locationError();
-        return;
-      },
-    });
+    getLocationByCity(searchLocation, pos);
   }
 
   function getLocationByCity(searchLocation, pos) {
@@ -111,9 +73,11 @@ $(function () {
   }
 
   $(document).on("click", ".location-choice-btn", function() {
-    city= $(this).data('city');
+    city = $(this).data('city');
     state = $(this).data('state');
-    getWeatherData($(this).data('lat'), $(this).data('lon'));
+    latitude = $(this).data('lat');
+    longitude = $(this).data('lon');
+    //getWeatherData($(this).data('lat'), $(this).data('lon'));
     $(".location-choice").remove();
     localStorage.setItem($(this).data('pos')+"Lat", $(this).data('lat'));
     localStorage.setItem($(this).data('pos')+"Lon", $(this).data('lon'));
@@ -123,9 +87,11 @@ $(function () {
     $("#location").addClass("error");
     $("#location-error").show();
   }
-  var url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`;
   function getWeatherData(lat, lon, addHistory=true) {
-    console.log("Tony Weather");
+
+    var url = `https://api.openweathermap.org/data/3.0/onecall`;
+    // console.log("Tony Weather");
+
     let data = {
       lat: lat,
       lon: lon,
@@ -147,11 +113,7 @@ $(function () {
           return;
         }
 
-        $("#root").html('');
-        console.log(weather);
-        if(addHistory) {
-          $("#location-history").append(`<button type="button" class="location-history-btn" data-lat="${lat}" data-lon="${lon}" data-city="${city}" data-state="${state}" data-country="${country}">${city}, ${state}</button>`);
-        }
+        getWeatherToday(weather);
       },
       error: function (response) {
         locationError();
@@ -160,39 +122,42 @@ $(function () {
     });
   };
 
-  var cardTodayBody = $('cardBodyToday');
-  function getWeatherToday() {
-  $(cardTodayBody).empty();
-  // console.log("Chris Weather");
 
-	$.ajax({
-		url: url,
-		method: 'GET',
-	}).then(function (response) {
-    console.log("chris")
-    console.log(response);
-		$('.cardTodayCityName').text(response.name);
-		$('.cardTodayDate').text(date);
+  function getWeatherToday(weatherToday) {
+    console.log("Weather Today", weatherToday);
+    $(".cardBodyToday").empty();
+    let currentDate = dayjs(dayjs.unix(parseInt(weatherToday.current.dt))).format("dddd, MMMM D, YYYY h:mmA");
+    console.log("Current Date", currentDate);
+    // console.log("Chris Weather");
+
+    // $.ajax({
+    // 	url: url,
+    // 	method: 'GET',
+    // }).then(function (response) {
+    // console.log(response);
+    console.log("End Value:",$("#end").val());
+		$('.cardTodayCityName').text($("#end").val());
+		$('.cardTodayDate').text(currentDate);
 		//Icons
-		$('.icons').attr('src', `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`);
+		$('.icons').attr('src', `./assets/img/weather-icons/${weatherToday.current.weather[0].icon}.png`);
 		// Temperature
-		var pEl = $('<p>').text(`Temperature: ${response.main.temp} °F`);
-		cardTodayBody.append(pEl);
+		var pEl = `<p>Temperature: ${weatherToday.current.temp} °F</p>`;
+		$(".cardBodyToday").append(`<p>Temperature: ${weatherToday.current.temp} °F</p>`);
 		//Feels Like
-		var pElTemp = $('<p>').text(`Feels Like: ${response.main.feels_like} °F`);
-		cardTodayBody.append(pElTemp);
+		var pElTemp = `<p>Feels Like: ${weatherToday.current.feels_like} °F</p>`;
+		$(".cardBodyToday").append(pElTemp);
 		//Humidity
-		var pElHumid = $('<p>').text(`Humidity: ${response.main.humidity} %`);
-		cardTodayBody.append(pElHumid);
+		var pElHumid = `<p>Humidity: ${weatherToday.current.humidity} %</p>`;
+		$(".cardBodyToday").append(pElHumid);
 		//Wind Speed
-		var pElWind = $('<p>').text(`Wind Speed: ${response.wind.speed} MPH`);
-		cardTodayBody.append(pElWind);
+		var pElWind = `<p>Wind Speed: ${weatherToday.current.speed} MPH</p>`;
+		$(".cardBodyToday").append(pElWind);
 		//Set the lat and long from the searched city
-		var cityLon = response.coord.lon;
+		//var cityLon = response.coord.lon;
 		// console.log(cityLon);
-		var cityLat = response.coord.lat;
+		//var cityLat = response.coord.lat;
 		// console.log(cityLat);
-  })
+  // })
 }
 });
 
@@ -227,8 +192,6 @@ const map = new mapboxgl.Map({
   center: [-86, 44], // starting position
   zoom: 4.5
 });
-
-
 
 // getRout(end) create a function to make a directions request
 // This is an async function that uses await to handle the fetch promise
@@ -284,7 +247,7 @@ async function getRoute(start, end) {
   // otherwise, we'll make a new request and draw the new features
   else {
 
-    //Adds a blue line to represent the travel path
+    // Adds a blue line to represent the travel path
     map.addLayer({
       id: 'route',
       type: 'line',

@@ -5,8 +5,6 @@
     --gradient: linear-gradient(-190deg, rgb(2, 126, 175) 0%, rgba(0,212,255,1) 100%);
     --gradientLight: linear-gradient(-190deg, rgb(94, 173, 205) 0%, rgb(152, 233, 249) 100%);
     --gradientGrey: linear-gradient(190deg, rgba(209,209,209,1) 0%, rgb(247, 247, 247) 100%);
-    --error-color: hsl(0, 68%, 42%);
-    --error-background-color: hsl(0, 68%, 80%);
 }
 
 * {
@@ -44,14 +42,27 @@ body {
 #search-content {
     background: var(--gradientGrey);
     background-image: url(/assets/img/form-bg.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
     padding: 2rem;
-    position: relative;
     flex-direction: column;
 }
 
 #search-form {
-    display: flex;
-    justify-content: center;
+    width:100%;
+    max-width: 700px;
+    margin-inline: auto;
+    position: relative;
+}
+
+.search-row {
+    display:flex;
+    flex-direction: row;
+    gap:1rem;
+}
+.search-row input {
+    flex-grow:1;
 }
 
 
@@ -78,7 +89,6 @@ button:hover {
 #map {
   position: relative;
   margin: 20px;
-  width: 400px;
   height: 400px;
 }
 
@@ -112,21 +122,40 @@ footer {
     position: absolute;
     border: 2px solid var(--blueDark);
     top:1rem;
-    right: 1rem;
+    right: 0;
     background: var(--light);
     padding:.75rem;
-    width: 35rem;
+    max-width: 35rem;
     box-shadow: 10px 5px 15px rgb(121, 121, 121);
     border-radius: 10px;
+    z-index: 1000;
   }
 
-.location-choice button:hover {
-    background-color: var(--greyLight);
-  }
 .card {
 	margin: 10px;
+    align-items: center;
 }
+
 .cardTodayDate {
 	font-size: 20px;
 }
-  /* @media screen and (max-width: 480px){
+
+#end, #start, .cardTodayCityName {
+    text-transform: capitalize;
+}
+
+#map-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#map-container > div {
+    /* border:1px solid black; */
+    flex-grow:1;
+}
+
+@media screen and (max-width: 480px){
+    #map-container {
+        flex-direction: column;
+    } 
+}
