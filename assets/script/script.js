@@ -132,8 +132,8 @@ $(function () {
 
 
   function displayWeather() {
-    let starWeather = JSON.parse(localstorage.getItem("startWeather"));
-    let endWeather = JSON.parse(localstorage.getItem("endWeatter"));
+    let starWeather = JSON.parse(localStorage.getItem("startWeather"));
+    let endWeather = JSON.parse(localStorage.getItem("endWeather"));
     console.log("Start Weather");
     console.log(starWeather);
     console.log("End Weather");
