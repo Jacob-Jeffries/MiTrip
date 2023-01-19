@@ -2,8 +2,8 @@ var apiKey = "dd973ce46d39d0efc4bc792777fb49f2";
 var city = "";
 var state = "";
 var country = "";
-let startCity = document.querySelector("#start");
-let endCity = document.querySelector("#end");
+let startCity = "";
+let endCity = "";
 var date = ('dddd, MMMM Do YYYY');
 var dateTime = ('YYYY-MM-DD HH:MM:SS');
 var latitude  = "";
@@ -84,6 +84,15 @@ $(function () {
     $(".location-choice").remove();
     localStorage.setItem($(this).data('pos')+"Lat", $(this).data('lat'));
     localStorage.setItem($(this).data('pos')+"Lon", $(this).data('lon'));
+    if($(this).data('pos') == "start"){
+      startCity = city;
+    }
+    else if($(this).data('pos') == "end"){
+      endCity = city;
+    }
+    else{
+      return
+    };
     getWeatherData(latitude, longitude, $(this).data('pos'));
   });
 
@@ -140,23 +149,30 @@ $(function () {
     let currentDate = dayjs(dayjs.unix(parseInt(weatherToday.current.dt))).format("dddd, MMMM D, YYYY h:mmA");
     console.log("Current Date", currentDate);
 
+    if(pos == "start"){
+      cityName = startCity;
+    };
+    if(pos == "end"){
+      cityName = endCity;
+    };
+
     console.log(pos+"Value:",$("#"+pos).val());
-		$('#'+pos+'.cardTodayCityName').text($("#"+pos).val());
+		$('.'+pos+'cardTodayCityName').text(cityName);
 		$('.cardTodayDate').text(currentDate);
 		//Icons
-		$('.icons').attr('src', `./assets/img/weather-icons/${weatherToday.current.weather[0].icon}.png`);
+		$('.'+pos+'icons').attr('src', `./assets/img/weather-icons/${weatherToday.current.weather[0].icon}.png`);
 		// Temperature
 		var pEl = `<p>Temperature: ${weatherToday.current.temp} °F</p>`;
-		$(".cardBodyToday").append(`<p>Temperature: ${weatherToday.current.temp} °F</p>`);
+		$('.'+pos+'cardBodyToday').append(`<p>Temperature: ${weatherToday.current.temp} °F</p>`);
 		//Feels Like
 		var pElTemp = `<p>Feels Like: ${weatherToday.current.feels_like} °F</p>`;
-		$(".cardBodyToday").append(pElTemp);
+		$('.'+pos+'cardBodyToday').append(pElTemp);
 		//Humidity
 		var pElHumid = `<p>Humidity: ${weatherToday.current.humidity} %</p>`;
-		$(".cardBodyToday").append(pElHumid);
+		$('.'+pos+'cardBodyToday').append(pElHumid);
 		//Wind Speed
 		var pElWind = `<p>Wind Speed: ${weatherToday.current.speed} MPH</p>`;
-		$(".cardBodyToday").append(pElWind);
+		$('.'+pos+'cardBodyToday').append(pElWind);
   };
 });
 
