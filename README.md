@@ -12,6 +12,8 @@ There are no installation requirments for this web applciation.
 
 ## Usage
 
+https://jacob-jeffries.github.io/MiTrip/
+
 1. To use the MiTrip web app, simply type in the name of your starting city, press [CONFIRM CITY] and select the city from the on screen options. 
 
 ![Confirm Start City](./images/Confirm_start.png)
