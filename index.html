@@ -70,24 +70,29 @@
       </section>
 
       <!--This section contains the MAPBOX div-container; including the map tile div and the directions div-->
-      <section id="directions">
-        <div id='map'></div>
-        <div id="map-container">
-          <div id="instructions"></div>
-          <div class="card bg-light">
-            <h2 class="cardTodayCityName"></h2>
-            <h3 class="cardTodayDate"></h3>
-            <img class="icons"/>
-            <div class="card-body cardBodyToday">
-            </div>
-        </div>
+      <section id="MapBox_Container">
+        <div id="map"></div>
+        <div id="instructions"></div>
       </section>
       <!--END Mapbox section-->
 
       <!--START of Weather display Section-->
-      <section id="weatherContainer">
-        <div id="startWeather" class="card-body cardBodyToday"></div>
-        <div id="endWeather" class="card-body cardBodyToday"></div>
+      <section id="weatherContainer" class="row">
+        <div id="startWeather" class="card bg-light">
+          <h2 class="cardTodayCityName"></h2>
+          <h3 class="cardTodayDate"></h3>
+          <img class="icons"/>
+          <div class="card-body cardBodyToday">
+          </div>
+        </div>
+
+        <div id="endWeather" class="card bg-light">
+          <h2 class="cardTodayCityName"></h2>
+         <h3 class="cardTodayDate"></h3>
+         <img class="icons"/>
+         <div class="card-body cardBodyToday">
+         </div>
+       </div>
       </section>
       <!--END of weather display section-->
       

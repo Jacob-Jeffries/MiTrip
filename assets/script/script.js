@@ -140,8 +140,8 @@ $(function () {
     let currentDate = dayjs(dayjs.unix(parseInt(weatherToday.current.dt))).format("dddd, MMMM D, YYYY h:mmA");
     console.log("Current Date", currentDate);
 
-    console.log("End Value:",$("#end").val());
-		$('.cardTodayCityName').text($("#end").val());
+    console.log(pos+"Value:",$("#"+pos).val());
+		$('#'+pos+'.cardTodayCityName').text($("#"+pos).val());
 		$('.cardTodayDate').text(currentDate);
 		//Icons
 		$('.icons').attr('src', `./assets/img/weather-icons/${weatherToday.current.weather[0].icon}.png`);
