@@ -1,35 +1,42 @@
+// Global Variables used throughout the code base
 var apiKey = "dd973ce46d39d0efc4bc792777fb49f2";
 var city = "";
 var state = "";
 var country = "";
-let startCity = document.querySelector("#start");
-let endCity = document.querySelector("#end");
+let startCity = "";
+let endCity = "";
 var date = ('dddd, MMMM Do YYYY');
 var dateTime = ('YYYY-MM-DD HH:MM:SS');
 var latitude  = "";
 var longitude = "";
+let pos = "";
 
+// Jquery style main fucntion to load the page 
 $(function () {
-  
+
+  // Event listeners for the city confirmation buttons, they call the getLocation() function passing in a string variable to denote the city's position in the schema  
   $(document).on("click", "#start-btn", function(event){
-    let pos = "start";
+    pos = "start";
     getLocation(pos);
   });
   
   $(document).on("click", "#end-btn", function(event){
-    let pos = "end";
+    pos = "end";
     getLocation(pos)
   });
   
-  // search listener
+  // Event listener for the main submit button, this button calls and tores the weather for each of the cities, then calls the mapbox fucntion to draw the map route and display the turn-by-turn directions
   $(document).on("submit", "#search-form", function(event) {
     event.preventDefault();
     $("#root").html('');
     console.log("lat/lon", latitude);
-    getWeatherData(latitude, longitude);
-    callMapbox();
+
+    displayWeather("start");
+    displayWeather("end");
+    callMapbox();  
   });
 
+  // Redundant function that could be reworked 
   function getLocation(pos) {
     let id = "#"+pos;
     console.log(id);
@@ -38,6 +45,7 @@ $(function () {
     getLocationByCity(searchLocation, pos);
   }
 
+  // This function uses the openWeather API to act as a forward geocoder, confirm the user input for cities
   function getLocationByCity(searchLocation, pos) {
     let url = "//api.openweathermap.org/geo/1.0/direct";
     let data = {
@@ -56,7 +64,7 @@ $(function () {
         console.log("length", locations.length);
         //if no results, show error
         if (locations.length == 0) {
-          locationError();
+          locationError(pos);
           return;
         }
 
@@ -64,33 +72,46 @@ $(function () {
         locations.forEach((location, index) => {
           $(".location-choice").append(`<button type="button" class="location-choice-btn" data-lat="${location.lat}" data-lon="${location.lon}" data-city="${location.name}" data-state="${location.state}" data-country="${location.country}" data-pos="${pos}" >${location.name}, ${location.state}</button>`);
         });
+        $("#"+pos+"-location-error").hide();
       },
       error: function (response) {
         locationError();
         return;
       },
     });
+    getWeatherData(latitude, longitude, pos);
   }
 
+  // Once the user clicks on the city confirmation options, this listener takes the data for that specific city and stores it for later use. It also calls the getWeatherData() function
   $(document).on("click", ".location-choice-btn", function() {
     city = $(this).data('city');
     state = $(this).data('state');
     latitude = $(this).data('lat');
     longitude = $(this).data('lon');
-    //getWeatherData($(this).data('lat'), $(this).data('lon'));
     $(".location-choice").remove();
     localStorage.setItem($(this).data('pos')+"Lat", $(this).data('lat'));
     localStorage.setItem($(this).data('pos')+"Lon", $(this).data('lon'));
+    if($(this).data('pos') == "start"){
+      startCity = city;
+    }
+    else if($(this).data('pos') == "end"){
+      endCity = city;
+    }
+    else{
+      return
+    };
+    getWeatherData(latitude, longitude, $(this).data('pos'));
   });
 
-  function locationError() {
-    $("#location").addClass("error");
-    $("#location-error").show();
-  }
-  function getWeatherData(lat, lon, addHistory=true) {
+  // If no city is found an error message is displayed, prompting the user to try again.
+  function locationError(pos) {
+    $("#"+pos+"-location-error").show();
+  };
+
+  // This function gets the weather data and stores it to local storage
+  function getWeatherData(lat, lon, pos, addHistory=true) {
 
     var url = `https://api.openweathermap.org/data/3.0/onecall`;
-    // console.log("Tony Weather");
 
     let data = {
       lat: lat,
@@ -113,7 +134,10 @@ $(function () {
           return;
         }
 
-        getWeatherToday(weather);
+        //Store the received weather data to local storage
+        localStorage.setItem(pos+"Weather", JSON.stringify(weather));
+        console.log(pos);
+        console.log(JSON.stringify(weather));
       },
       error: function (response) {
         locationError();
@@ -122,46 +146,44 @@ $(function () {
     });
   };
 
+  // This function is called twice to display the weather data for both the start and end cities
+  function displayWeather(pos) {
+    let weatherToday = JSON.parse(localStorage.getItem(pos+"Weather"));
+    console.log(pos+"Weather");
+    console.log(weatherToday);
 
-  function getWeatherToday(weatherToday) {
-    console.log("Weather Today", weatherToday);
     $(".cardBodyToday").empty();
     let currentDate = dayjs(dayjs.unix(parseInt(weatherToday.current.dt))).format("dddd, MMMM D, YYYY h:mmA");
     console.log("Current Date", currentDate);
-    // console.log("Chris Weather");
 
-    // $.ajax({
-    // 	url: url,
-    // 	method: 'GET',
-    // }).then(function (response) {
-    // console.log(response);
-    console.log("End Value:",$("#end").val());
-		$('.cardTodayCityName').text($("#end").val());
+    if(pos == "start"){
+      cityName = startCity;
+    };
+    if(pos == "end"){
+      cityName = endCity;
+    };
+
+    console.log(pos+"Value:",$("#"+pos).val());
+		$('.'+pos+'cardTodayCityName').text(cityName);
 		$('.cardTodayDate').text(currentDate);
 		//Icons
-		$('.icons').attr('src', `./assets/img/weather-icons/${weatherToday.current.weather[0].icon}.png`);
+		$('.'+pos+'icons').attr('src', `./assets/img/weather-icons/${weatherToday.current.weather[0].icon}.png`).attr('class', 'img-fluid');
 		// Temperature
 		var pEl = `<p>Temperature: ${weatherToday.current.temp} °F</p>`;
-		$(".cardBodyToday").append(`<p>Temperature: ${weatherToday.current.temp} °F</p>`);
+		$('.'+pos+'cardBodyToday').append(pEl);
 		//Feels Like
 		var pElTemp = `<p>Feels Like: ${weatherToday.current.feels_like} °F</p>`;
-		$(".cardBodyToday").append(pElTemp);
+		$('.'+pos+'cardBodyToday').append(pElTemp);
 		//Humidity
 		var pElHumid = `<p>Humidity: ${weatherToday.current.humidity} %</p>`;
-		$(".cardBodyToday").append(pElHumid);
+		$('.'+pos+'cardBodyToday').append(pElHumid);
 		//Wind Speed
-		var pElWind = `<p>Wind Speed: ${weatherToday.current.speed} MPH</p>`;
-		$(".cardBodyToday").append(pElWind);
-		//Set the lat and long from the searched city
-		//var cityLon = response.coord.lon;
-		// console.log(cityLon);
-		//var cityLat = response.coord.lat;
-		// console.log(cityLat);
-  // })
-}
+		var pElWind = `<p>Wind Speed: ${weatherToday.current.wind_speed} MPH</p>`;
+		$('.'+pos+'cardBodyToday').append(pElWind);
+  };
 });
 
-// Start of MAPBOX code-----JJ
+// Start of MAPBOX code
 
 function callMapbox(){
   let start = [null]
@@ -182,10 +204,10 @@ function callMapbox(){
   end = [null]
 }
 
-// Line 205: Save my API Token as a variable used later in the API call
+// Save my API Token as a variable used later in the API call
 mapboxgl.accessToken = 'pk.eyJ1IjoiamFjb2ItamVmZnJpZXMiLCJhIjoiY2xjcDJzeTJtMWh3YzNwcjBscWJ2amg5OCJ9.FCsyRgLMa5gW0lyMlWsClw';
 
-// Line 208-213: Creates a "map" variable and  draws it onto the screen; into which start point, end point, and directions lines will be drawn.
+// Creates a "map" variable and  draws it onto the screen; into which start point, end point, and directions lines will be drawn.
 const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/streets-v12',
@@ -193,7 +215,7 @@ const map = new mapboxgl.Map({
   zoom: 4.5
 });
 
-// getRout(end) create a function to make a directions request
+// getRout(start, end) create a function to make a directions request
 // This is an async function that uses await to handle the fetch promise
 async function getRoute(start, end) {
   // Mapbox API call  
@@ -220,6 +242,7 @@ async function getRoute(start, end) {
   };
 
   // if the route already exists on the map, we'll reset it using setData
+  // This gave me all sorts of trouble, once a layer is added to a map it is non longer a "layer" and becomes a "source" to move it you have to modify the "source" not the "layer" - GOLLY!
   if (map.getSource('route')) {
     // console.log("if");
     map.getSource('route').setData(geojson);
@@ -246,7 +269,6 @@ async function getRoute(start, end) {
   }
   // otherwise, we'll make a new request and draw the new features
   else {
-
     // Adds a blue line to represent the travel path
     map.addLayer({
       id: 'route',

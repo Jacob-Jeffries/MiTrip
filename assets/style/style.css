@@ -129,10 +129,17 @@ footer {
     box-shadow: 10px 5px 15px rgb(121, 121, 121);
     border-radius: 10px;
     z-index: 1000;
-  }
+}
+
+#start-location-error{
+    display:none;
+}
+
+#end-location-error{
+    display: none;
+}
 
 .card {
-	margin: 10px;
     align-items: center;
 }
 
@@ -142,16 +149,6 @@ footer {
 
 #end, #start, .cardTodayCityName {
     text-transform: capitalize;
-}
-
-#map-container {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-#map-container > div {
-    /* border:1px solid black; */
-    flex-grow:1;
 }
 
 @media screen and (max-width: 480px){
