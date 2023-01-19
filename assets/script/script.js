@@ -131,18 +131,18 @@ $(function () {
   };
 
 
-  function displayWeather(weatherToday) {
-    console.log("Weather Today", weatherToday);
+  function displayWeather() {
+    let starWeather = JSON.parse(localstorage.getItem("startWeather"));
+    let endWeather = JSON.parse(localstorage.getItem("endWeatter");
+    console.log("Start Weather");
+    console.log(starWeather);
+    console.log("End Weather");
+    console.log(endWeather);
+
     $(".cardBodyToday").empty();
     let currentDate = dayjs(dayjs.unix(parseInt(weatherToday.current.dt))).format("dddd, MMMM D, YYYY h:mmA");
     console.log("Current Date", currentDate);
-    // console.log("Chris Weather");
 
-    // $.ajax({
-    // 	url: url,
-    // 	method: 'GET',
-    // }).then(function (response) {
-    // console.log(response);
     console.log("End Value:",$("#end").val());
 		$('.cardTodayCityName').text($("#end").val());
 		$('.cardTodayDate').text(currentDate);
@@ -160,13 +160,7 @@ $(function () {
 		//Wind Speed
 		var pElWind = `<p>Wind Speed: ${weatherToday.current.speed} MPH</p>`;
 		$(".cardBodyToday").append(pElWind);
-		//Set the lat and long from the searched city
-		//var cityLon = response.coord.lon;
-		// console.log(cityLon);
-		//var cityLat = response.coord.lat;
-		// console.log(cityLat);
-  // })
-}
+  };
 });
 
 // Start of MAPBOX code-----JJ
