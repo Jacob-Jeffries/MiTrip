@@ -30,7 +30,7 @@ $(function () {
 
     //Instead of taking data directly, these function will pull stored data from the local storage
     callMapbox();  
-    getWeatherToday();
+    displayWeather();
   });
 
   function getLocation(pos) {
@@ -131,7 +131,7 @@ $(function () {
   };
 
 
-  function getWeatherToday(weatherToday) {
+  function displayWeather(weatherToday) {
     console.log("Weather Today", weatherToday);
     $(".cardBodyToday").empty();
     let currentDate = dayjs(dayjs.unix(parseInt(weatherToday.current.dt))).format("dddd, MMMM D, YYYY h:mmA");
