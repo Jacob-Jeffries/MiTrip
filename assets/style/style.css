@@ -33,7 +33,7 @@ body {
 }
 
 .form-input {
-    width: 100%;
+    /* width: 100%; */
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
@@ -120,4 +120,13 @@ footer {
     border-radius: 10px;
   }
 
+.location-choice button:hover {
+    background-color: var(--greyLight);
+  }
+.card {
+	margin: 10px;
+}
+.cardTodayDate {
+	font-size: 20px;
+}
   /* @media screen and (max-width: 480px){
