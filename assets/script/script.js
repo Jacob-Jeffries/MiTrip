@@ -28,14 +28,8 @@ $(function () {
     $("#root").html('');
     console.log("lat/lon", latitude);
 
-    let starWeather = JSON.parse(localStorage.getItem("startWeather"));
-    let endWeather = JSON.parse(localStorage.getItem("endWeather"));
-    console.log("Start Weather");
-    console.log(starWeather);
-    console.log("End Weather");
-    console.log(endWeather);
-    displayWeather(startWeather);
-    displayWeather(endWeather);
+    displayWeather("start");
+    displayWeather("end");
     callMapbox();  
   });
 
@@ -137,8 +131,10 @@ $(function () {
   };
 
 
-  function displayWeather() {
-
+  function displayWeather(pos) {
+    let weatherToday = JSON.parse(localStorage.getItem(pos+"Weather"));
+    console.log(pos+"Weather");
+    console.log(weatherToday);
 
     $(".cardBodyToday").empty();
     let currentDate = dayjs(dayjs.unix(parseInt(weatherToday.current.dt))).format("dddd, MMMM D, YYYY h:mmA");
