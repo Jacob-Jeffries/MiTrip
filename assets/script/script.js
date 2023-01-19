@@ -27,8 +27,10 @@ $(function () {
     event.preventDefault();
     $("#root").html('');
     console.log("lat/lon", latitude);
-    // getWeatherData(latitude, longitude);
-    callMapbox();
+
+    //Instead of taking data directly, these function will pull stored data from the local storage
+    callMapbox();  
+    getWeatherToday();
   });
 
   function getLocation(pos) {
