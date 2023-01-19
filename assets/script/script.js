@@ -59,12 +59,7 @@ $(function () {
           locationError();
           return;
         }
-        if (locations.length == 1) {
-          getWeatherData(locations[0].lat, locations[0].lon);
-          city = locations[0].name;
-          state = locations[0].state;
-          return;
-        }
+
         $("#search-btn").after('<div class="location-choice"><h3>Which One?</h3></div>');
         locations.forEach((location, index) => {
           $(".location-choice").append(`<button type="button" class="location-choice-btn" data-lat="${location.lat}" data-lon="${location.lon}" data-city="${location.name}" data-state="${location.state}" data-country="${location.country}" data-pos="${pos}" >${location.name}, ${location.state}</button>`);
@@ -93,8 +88,10 @@ $(function () {
     $("#location-error").show();
   }
   function getWeatherData(lat, lon, addHistory=true) {
+
     var url = `https://api.openweathermap.org/data/3.0/onecall`;
     // console.log("Tony Weather");
+
     let data = {
       lat: lat,
       lon: lon,
