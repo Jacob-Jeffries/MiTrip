@@ -33,7 +33,7 @@ body {
 }
 
 .form-input {
-    /* width: 100%; */
+    /* Jacob removed the width 100% so that the confirm city buttons could be added next to them*/
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
