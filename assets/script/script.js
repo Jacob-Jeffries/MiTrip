@@ -27,7 +27,7 @@ $(function () {
     event.preventDefault();
     $("#root").html('');
     console.log("lat/lon", latitude);
-    getWeatherData(latitude, longitude);
+    // getWeatherData(latitude, longitude);
     callMapbox();
   });
 
@@ -71,6 +71,7 @@ $(function () {
         return;
       },
     });
+    getWeatherData(latitude, longitude, pos);
   }
 
   $(document).on("click", ".location-choice-btn", function() {
@@ -78,17 +79,17 @@ $(function () {
     state = $(this).data('state');
     latitude = $(this).data('lat');
     longitude = $(this).data('lon');
-    //getWeatherData($(this).data('lat'), $(this).data('lon'));
     $(".location-choice").remove();
     localStorage.setItem($(this).data('pos')+"Lat", $(this).data('lat'));
     localStorage.setItem($(this).data('pos')+"Lon", $(this).data('lon'));
+    getWeatherData(latitude, longitude, $(this).data('pos'));
   });
 
   function locationError() {
     $("#location").addClass("error");
     $("#location-error").show();
   }
-  function getWeatherData(lat, lon, addHistory=true) {
+  function getWeatherData(lat, lon, pos, addHistory=true) {
 
     var url = `https://api.openweathermap.org/data/3.0/onecall`;
     // console.log("Tony Weather");
@@ -114,7 +115,11 @@ $(function () {
           return;
         }
 
-        getWeatherToday(weather);
+        localStorage.setItem(pos+"Weather", JSON.stringify(weather));
+        console.log(pos);
+        console.log(JSON.stringify(weather));
+
+        // getWeatherToday(weather);
       },
       error: function (response) {
         locationError();
