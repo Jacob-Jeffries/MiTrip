@@ -28,9 +28,15 @@ $(function () {
     $("#root").html('');
     console.log("lat/lon", latitude);
 
-    //Instead of taking data directly, these function will pull stored data from the local storage
+    let starWeather = JSON.parse(localStorage.getItem("startWeather"));
+    let endWeather = JSON.parse(localStorage.getItem("endWeather"));
+    console.log("Start Weather");
+    console.log(starWeather);
+    console.log("End Weather");
+    console.log(endWeather);
+    displayWeather(startWeather);
+    displayWeather(endWeather);
     callMapbox();  
-    displayWeather();
   });
 
   function getLocation(pos) {
@@ -132,12 +138,7 @@ $(function () {
 
 
   function displayWeather() {
-    let starWeather = JSON.parse(localStorage.getItem("startWeather"));
-    let endWeather = JSON.parse(localStorage.getItem("endWeather"));
-    console.log("Start Weather");
-    console.log(starWeather);
-    console.log("End Weather");
-    console.log(endWeather);
+
 
     $(".cardBodyToday").empty();
     let currentDate = dayjs(dayjs.unix(parseInt(weatherToday.current.dt))).format("dddd, MMMM D, YYYY h:mmA");
