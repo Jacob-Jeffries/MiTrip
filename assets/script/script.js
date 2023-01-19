@@ -167,7 +167,7 @@ $(function () {
 		$('.'+pos+'cardTodayCityName').text(cityName);
 		$('.cardTodayDate').text(currentDate);
 		//Icons
-		$('.'+pos+'icons').attr('src', `./assets/img/weather-icons/${weatherToday.current.weather[0].icon}.png`);
+		$('.'+pos+'icons').attr('src', `./assets/img/weather-icons/${weatherToday.current.weather[0].icon}.png`).attr('class', 'img-fluid');
 		// Temperature
 		var pEl = `<p>Temperature: ${weatherToday.current.temp} °F</p>`;
 		$('.'+pos+'cardBodyToday').append(pEl);
